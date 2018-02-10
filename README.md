@@ -2,6 +2,7 @@
 
 ```js
 import { loadBuffer } from 'web-audio-utils';
+import { SourceBuffer, Analyzer, Processor, Destination } from 'web-audio-nodes';
 
 loadBuffer(path).then(buffer => {
   const fftSize = 2048;
