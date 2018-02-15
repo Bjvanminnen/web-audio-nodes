@@ -7,7 +7,7 @@
  */
 
 let context;
-function getContext () {
+export function getContext () {
   if (context) {
     return context;
   }
@@ -159,9 +159,22 @@ export function Oscillator(options, ...targets) {
   return connect(node, ...targets);
 }
 
+/**
+ * @param {number} options.numInputs
+ */
 export function ChannelMerger(options, ...targets) {
   [options, targets] = resolveInputs(options, ...targets);
 
   const node = getContext().createChannelMerger(options.numInputs);
+  return connect(node, ...targets);
+}
+
+/**
+ * @param {MediaStream} options.stream
+ */
+export function MediaStreamSource(options, ...targets) {
+  [options, targets] = resolveInputs(options, ...targets);
+
+  const node = getContext().createMediaStreamSource(options.stream);
   return connect(node, ...targets);
 }

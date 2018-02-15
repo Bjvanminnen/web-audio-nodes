@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
+exports.getContext = getContext;
 exports.connect = connect;
 exports.disconnectGraph = disconnectGraph;
 exports.Destination = Destination;
@@ -15,6 +16,7 @@ exports.Gain = Gain;
 exports.SourceBuffer = SourceBuffer;
 exports.Oscillator = Oscillator;
 exports.ChannelMerger = ChannelMerger;
+exports.MediaStreamSource = MediaStreamSource;
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -243,6 +245,9 @@ function Oscillator(options) {
   return connect.apply(undefined, [node].concat(_toConsumableArray(targets)));
 }
 
+/**
+ * @param {number} options.numInputs
+ */
 function ChannelMerger(options) {
   for (var _len9 = arguments.length, targets = Array(_len9 > 1 ? _len9 - 1 : 0), _key9 = 1; _key9 < _len9; _key9++) {
     targets[_key9 - 1] = arguments[_key9];
@@ -257,5 +262,25 @@ function ChannelMerger(options) {
 
 
   var node = getContext().createChannelMerger(options.numInputs);
+  return connect.apply(undefined, [node].concat(_toConsumableArray(targets)));
+}
+
+/**
+ * @param {MediaStream} options.stream
+ */
+function MediaStreamSource(options) {
+  for (var _len10 = arguments.length, targets = Array(_len10 > 1 ? _len10 - 1 : 0), _key10 = 1; _key10 < _len10; _key10++) {
+    targets[_key10 - 1] = arguments[_key10];
+  }
+
+  var _resolveInputs13 = resolveInputs.apply(undefined, [options].concat(_toConsumableArray(targets)));
+
+  var _resolveInputs14 = _slicedToArray(_resolveInputs13, 2);
+
+  options = _resolveInputs14[0];
+  targets = _resolveInputs14[1];
+
+
+  var node = getContext().createMediaStreamSource(options.stream);
   return connect.apply(undefined, [node].concat(_toConsumableArray(targets)));
 }
