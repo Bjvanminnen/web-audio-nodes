@@ -125,14 +125,16 @@ export function Processor(options, ...targets) {
 }
 
 /**
- * @param options.value
+ * @param {number} options.value
  */
 export function Gain(options, ...targets) {
   [options, targets] = resolveInputs(options, ...targets);
 
   const node = getContext().createGain();
   applyOptions(node, options);
-  node.gain.value = options.value || 1;
+  if (options.value !== undefined) {
+    node.gain.setValueAtTime(options.value, getContext().currentTime);
+  }
   return connect(node, ...targets);
 }
 
